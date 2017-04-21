@@ -59,7 +59,7 @@ class Project():
 		self.dateChanged = ''
 		# Repeat settings
 		# Review settings
-		# initialize displayNr (append as last item in displayed list)
+		# Initialize displayNr (append as last item in displayed list)
 
 class Action(Project):
 	def __init__(self, project):
