@@ -1,11 +1,7 @@
-import datetime, json, os, tkinter
+import datetime, json, os
+from tkinter import *
 
-actions = []
-inbox = []
-projects = []
-tags = []
-
-def saveToFile(list, PATH):
+def save_to_file(list, PATH):
 	f = open(PATH, 'w')
 	if PATH in ['actions.txt', 'inbox.txt', 'projects.txt']:
 		for item in list:
@@ -16,17 +12,38 @@ def saveToFile(list, PATH):
 			f.write(item + '\n')
 	f.close()
 
-def loadFromFile(PATH):
+def load_from_file(PATH):
 	list = []
 	f = open(PATH, 'r')
 	if PATH in ['actions.txt', 'inbox.txt', 'projects.txt']:
 		for line in f.readlines():			
-			list.append(json.loads(line[0:-1]))		# Load json from file into var
+			list.append(json.loads(line[0:-1]))		# load json from file into var
 	elif PATH in ['tags.txt']:
 		for line in f.readlines():
 			list.append(line[0:-1])
 	return list
 	f.close()
+
+class Application(Frame):
+	def __init__(self, master = None):
+		super().__init__(master)
+		self.pack()
+		self.create_widgets()
+	def create_widgets(self):
+		self.inbox_button = Button(self, text = 'Inbox')
+		self.inbox_button.pack(side = 'top')
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Project():
 	def __init__(self):
@@ -42,7 +59,7 @@ class Project():
 		self.dateChanged = ''
 		# Repeat settings
 		# Review settings
-		# Initialize displayNr (append as last item in displayed list)
+		# initialize displayNr (append as last item in displayed list)
 
 class Action(Project):
 	def __init__(self, project):
@@ -51,31 +68,22 @@ class Action(Project):
 		self.project = project
 
 def main():
-	# Load contents into variables
-	actions = loadFromFile('actions.txt')
-	inbox = loadFromFile('inbox.txt')
-	projects = loadFromFile('projects.txt')
-	tags = loadFromFile('tags.txt')
+	root = Tk()							# GUI setup
+	root.attributes('-fullscreen', True)
 
+	actions = load_from_file('actions.txt')				# load contents into variables
+	inbox = load_from_file('inbox.txt')
+	projects = load_from_file('projects.txt')
+	tags = load_from_file('tags.txt')
 
-	
+	# Do stuff
 
+	save_to_file(actions, 'actions.txt')				# write to files
+	save_to_file(inbox, 'inbox.txt')
+	save_to_file(projects, 'projects.txt')
+	save_to_file(tags, 'tags.txt')
 
-
-
-
-
-
-
-
-
-
-
-
-	# Write to files
-	saveToFile(actions, 'actions.txt')
-	saveToFile(inbox, 'inbox.txt')
-	saveToFile(projects, 'projects.txt')
-	saveToFile(tags, 'tags.txt')
 	# Create backups periodically 
+
+	Application(master = root).mainloop()
 main()
