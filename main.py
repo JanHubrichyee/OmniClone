@@ -42,7 +42,7 @@ class Project():
 		self.dateChanged = ''
 		# Repeat settings
 		# Review settings
-		# initialize displayNr (append as last item in displayed list)
+		# Initialize displayNr (append as last item in displayed list)
 
 class Action(Project):
 	def __init__(self, project):
@@ -51,7 +51,7 @@ class Action(Project):
 		self.project = project
 
 def main():
-	# load contents into variables
+	# Load contents into variables
 	actions = loadFromFile('actions.txt')
 	inbox = loadFromFile('inbox.txt')
 	projects = loadFromFile('projects.txt')
