@@ -2,6 +2,7 @@ import datetime, json, os
 from tkinter import *
 
 root = Tk()								# GUI setup
+root.wm_title('OmniClone')
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 root.geometry("%dx%d+0+0" % (screen_width, screen_height))		# go fullscreen
@@ -30,23 +31,52 @@ def load_from_file(PATH):
 	f.close()
 
 class Application(Frame):
+	top_y = 70							# height of toolbar
+	toolbar = Frame(		height = top_y,
+					width = screen_width, bd = 0.5,
+					relief = RAISED			)
+	toolbar.configure(		background = '#e8e8e8'		)
+
+	selector = Frame(		height = screen_height - top_y,
+					width = screen_width*1.5/26,
+					bd = 0.5,
+					relief = RAISED			)
+	selector.configure(		background = 'red'		)
+
+	project_list = Frame(		height = screen_height - top_y, 
+					width = screen_width*5.5/26,
+					bd = 0.5,
+					relief = RAISED			)
+	project_list.configure(		background = 'orange'		)
+
+	action_list = Frame(		height = screen_height - top_y,
+					width = screen_width*12/26,
+					bd = 0.5,
+					relief = RAISED			)
+	action_list.configure(		background = 'yellow'		)
+	#action_list.columnconfigure(2, 	weight = 10			)
+
+	inspector = Frame(		height = screen_height - top_y,
+					width = screen_width*7/26,
+					bd = 0.5,
+					relief = RAISED			)
+	inspector.configure(		background = 'green'		)
 
 	def __init__(self, master = None):
 		super().__init__(master)
 		self.create_widgets()
-	def create_widgets(self):
-		self.inbox_button = Button(self, text = 'Inbox')
-		self.inbox_button.grid(row = 5, column = 5)
-		self.l1 = Label(root, text = 'name')
-		self.l2 = Label(root, text = 'password')
-		self.e1 = Entry(root)
-		self.e2 = Entry(root)
-		self.l1.grid(row = 0, column = 0)
-		self.l2.grid(row = 1, column = 0)
-		self.e1.grid(row = 0, column = 1)
-		self.e2.grid(row = 1, column = 1)
 
-
+	def create_widgets(self):	
+		self.toolbar.grid(	row = 0,
+					column = 0,
+					columnspan = 3)
+		self.selector.grid(	sticky = 'W')
+		self.project_list.grid(	row = 1,
+					column = 1)
+		self.action_list.grid(	row = 1,
+					column = 2)
+		self.inspector.grid(	row = 1,
+					column = 3)
 
 class Project():
 	def __init__(self):
@@ -67,7 +97,7 @@ class Project():
 class Action(Project):
 	def __init__(self, project):
 		super(Action, self).__init__()
-		# What about actions without projects?
+		# actions without projects have inbox as their project
 		self.project = project
 
 def main():
@@ -86,4 +116,5 @@ def main():
 	# Create backups periodically 
 
 	Application(master = root).mainloop()
+	
 main()
