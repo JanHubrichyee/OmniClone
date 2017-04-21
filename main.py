@@ -1,6 +1,11 @@
 import datetime, json, os
 from tkinter import *
 
+root = Tk()								# GUI setup
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+root.geometry("%dx%d+0+0" % (screen_width, screen_height))		# go fullscreen
+
 def save_to_file(list, PATH):
 	f = open(PATH, 'w')
 	if PATH in ['actions.txt', 'inbox.txt', 'projects.txt']:
@@ -25,23 +30,21 @@ def load_from_file(PATH):
 	f.close()
 
 class Application(Frame):
+
 	def __init__(self, master = None):
 		super().__init__(master)
-		self.pack()
 		self.create_widgets()
 	def create_widgets(self):
 		self.inbox_button = Button(self, text = 'Inbox')
-		self.inbox_button.pack(side = 'top')
-
-
-
-
-
-
-
-
-
-
+		self.inbox_button.grid(row = 5, column = 5)
+		self.l1 = Label(root, text = 'name')
+		self.l2 = Label(root, text = 'password')
+		self.e1 = Entry(root)
+		self.e2 = Entry(root)
+		self.l1.grid(row = 0, column = 0)
+		self.l2.grid(row = 1, column = 0)
+		self.e1.grid(row = 0, column = 1)
+		self.e2.grid(row = 1, column = 1)
 
 
 
@@ -68,9 +71,6 @@ class Action(Project):
 		self.project = project
 
 def main():
-	root = Tk()							# GUI setup
-	root.attributes('-fullscreen', True)
-
 	actions = load_from_file('actions.txt')				# load contents into variables
 	inbox = load_from_file('inbox.txt')
 	projects = load_from_file('projects.txt')
