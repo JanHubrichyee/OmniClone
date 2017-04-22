@@ -69,7 +69,7 @@ class Application(Frame):
 	def create_widgets(self):	
 		self.toolbar.grid(	row = 0,
 					column = 0,
-					columnspan = 3)
+					columnspan = 4)
 		self.selector.grid(	sticky = 'W')
 		self.project_list.grid(	row = 1,
 					column = 1)
