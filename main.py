@@ -15,7 +15,7 @@ def save_to_file(list, PATH):
 			f.write(json_str + '\n')			# write encoded string to .txt
 	elif PATH in ['tags.txt']:
 		for item in list:
-			f.write(item + '\n')
+			f.write(item + '\n')daaasddasda
 	f.close()
 
 def load_from_file(PATH):
@@ -47,7 +47,7 @@ class Application(Frame):
 					width = screen_width*5.5/26,
 					bd = 0.5,
 					relief = RAISED			)
-	project_list.configure(		background = 'orange'		)
+	project_list.configure(		background = 'orange'		)asdasda
 
 	action_list = Frame(		height = screen_height - top_y,
 					width = screen_width*12/26,
@@ -58,17 +58,7 @@ class Application(Frame):
 
 	inspector = Frame(		height = screen_height - top_y,
 					width = screen_width*7/26,
-					bd = 0.5,
-					relief = RAISED			)
-	inspector.configure(		background = 'green'		)
-
-	def __init__(self, master = None):
-		super().__init__(master)
-		self.create_widgets()
-
-	def create_widgets(self):	
-		self.toolbar.grid(	row = 0,
-					column = 0,
+		 = 0,
 					columnspan = 3)
 		self.selector.grid(	sticky = 'W')
 		self.project_list.grid(	row = 1,
@@ -83,7 +73,7 @@ class Project():
 		self.completed = False
 		self.title = ''
 		self.tags = []
-		self.deferUntil = ''
+		self.deferUntil = ''asdaskldjasdk
 		self.due = ''
 		self.estTime = ''
 		self.comment = ''
@@ -99,10 +89,7 @@ class Action(Project):
 		super(Action, self).__init__()
 		# actions without projects have inbox as their project
 		self.project = project
-
-def main():
-	actions = load_from_file('actions.txt')				# load contents into variables
-	inbox = load_from_file('inbox.txt')
+('inbox.txt')
 	projects = load_from_file('projects.txt')
 	tags = load_from_file('tags.txt')
 
@@ -114,7 +101,7 @@ def main():
 	save_to_file(tags, 'tags.txt')
 
 	# Create backups periodically 
-
+asdaskjdasd
 	Application(master = root).mainloop()
 	
 main()
