@@ -1,18 +1,17 @@
-import datetime, json, os
-from tkinter import *
+#!/usr/local/bin/python\ 3.6
+import datetime, json, os, random, sys
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 
-root = Tk()								# GUI setup
-root.wm_title('OmniClone')
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
-root.geometry("%dx%d+0+0" % (screen_width, screen_height))		# go fullscreen
+# Gui options
+app = QApplication(sys.argv)
 
 def save_to_file(list, PATH):
 	f = open(PATH, 'w')
 	if PATH in ['actions.txt', 'inbox.txt', 'projects.txt']:
 		for item in list:
-			json_str = json.dumps(item.__dict__)		# convert data to encoded string
-			f.write(json_str + '\n')			# write encoded string to .txt
+			json_str = json.dumps(item.__dict__)			# convert data to encoded string
+			f.write(json_str + '\n')				# write encoded string to .txt
 	elif PATH in ['tags.txt']:
 		for item in list:
 			f.write(item + '\n')
@@ -23,60 +22,150 @@ def load_from_file(PATH):
 	f = open(PATH, 'r')
 	if PATH in ['actions.txt', 'inbox.txt', 'projects.txt']:
 		for line in f.readlines():			
-			list.append(json.loads(line[0:-1]))		# load json from file into var
+			list.append(json.loads(line[0:-1]))			# load json from file into var
 	elif PATH in ['tags.txt']:
 		for line in f.readlines():
 			list.append(line[0:-1])
-	return list
 	f.close()
+	return list
 
-class Application(Frame):
-	top_y = 70							# height of toolbar
-	toolbar = Frame(		height = top_y,
-					width = screen_width, bd = 0.5,
-					relief = RAISED			)
-	toolbar.configure(		background = '#e8e8e8'		)
+class Window(QMainWindow):
+	def __init__(self, mode):
+		super(Window, self).__init__()
+		self.screen_size = QSize()
+		self.screen_size.setWidth(3600)
+		self.screen_size.setHeight(1800)
+		#-self.setWindowIcon(GtGui.QIcon('pythonlogo.png'))
+		self.win = QDialog()
+		self.win.setGeometry(0, 0, self.screen_size.width(), self.screen_size.height())
+		self.win.setWindowTitle('OmniClone')	
+		#-make size constant throughout all display sizes/formats	
+		self.display(mode)
+		sys.exit(app.exec_())
+	
+	def bCalendarClicked(self):
+		pass
+	def bInboxClicked(self):
+		print('click')
+	def bFlaggedClicked(self):
+		pass
+	def bForecastClicked(self):
+		pass
+	def bProjectsClicked(self):
+		pass
+	def bReviewClicked(self):
+		pass
+	def bTagsClicked(self):
+		pass
 
-	selector = Frame(		height = screen_height - top_y,
-					width = screen_width*1.5/26,
-					bd = 0.5,
-					relief = RAISED			)
-	selector.configure(		background = 'red'		)
+	def display(self, mode):
+		# Widget Instantiation+Arrangement
+		gwindow = QGridLayout()
+		self.actionList = QFrame(self.win)
+		self.calendar = QFrame(self.win)
+		self.inspectorCal = QFrame(self.win)
+		self.inspectorRem = QFrame(self.win)
+		self.projectList = QFrame(self.win)
+		self.selector = QFrame(self.win)	
+		self.toolbar = QFrame(self.win)
+		gwindow.addWidget(self.toolbar, 0, 0, 1, 34)
+		gwindow.addWidget(self.selector, 2, 0, 18, 2)
+		
+		self.bCalendar = QPushButton(self.selector)
+		self.bFlagged = QPushButton(self.selector)
+		self.bInbox = QPushButton(self.selector)
+		self.bProjects = QPushButton(self.selector)
+		self.bReview = QPushButton(self.selector)
+		self.bTags = QPushButton(self.selector)
+		
+		self.bCalendar.clicked.connect(self.bCalendarClicked)
+		self.bInbox.clicked.connect(self.bInboxClicked)
+		self.bProjects.clicked.connect(self.bProjectsClicked)
+		self.bTags.clicked.connect(self.bTagsClicked)
+		self.bFlagged.clicked.connect(self.bFlaggedClicked)
+		self.bReview.clicked.connect(self.bReviewClicked)
 
-	project_list = Frame(		height = screen_height - top_y, 
-					width = screen_width*5.5/26,
-					bd = 0.5,
-					relief = RAISED			)
-	project_list.configure(		background = 'orange'		)
+		# Widget Stylesheets
+		bc = '#c5c9c7'
+		self.actionList.setStyleSheet('background-color : ' + bc)
+		self.calendar.setStyleSheet('background-color : ' + bc)
+		self.inspectorCal.setStyleSheet('background-color : ' + bc)
+		self.inspectorRem.setStyleSheet('background-color : ' + bc)
+		self.projectList.setStyleSheet('background-color : ' + bc)
+		self.selector.setStyleSheet('background-color : ' + bc)
+		self.toolbar.setStyleSheet('background-color : ' + bc)
+		for w in [self.actionList, self.calendar, self.inspectorCal, self.inspectorRem, self.projectList, self.selector, self.toolbar]:
+			w.setLineWidth(3)
 
-	action_list = Frame(		height = screen_height - top_y,
-					width = screen_width*12/26,
-					bd = 0.5,
-					relief = RAISED			)
-	action_list.configure(		background = 'yellow'		)
-	#action_list.columnconfigure(2, 	weight = 10			)
+		# Button Styles
+		self.Buttons = [self.bCalendar, self.bFlagged, self.bInbox, self.bProjects, self.bReview, self.bTags]
+		self.swidth = self.selector.frameGeometry().width()
+		self.sheight = self.selector.frameGeometry().height()
+		i = 0
+		for b in self.Buttons:
+			b.resize(self.swidth + self.sheight*2, self.swidth + self.sheight*2)
+			b.move(0, (self.swidth + self.sheight*2)*i)
+			i += 1
+		
+		# Displaying main section
+		if mode == 'calendar':
+			gwindow.addWidget(self.calendar, 2, 2, 18, 25)
+			gwindow.addWidget(self.inspectorCal, 2, 27, 18, 7)
 
-	inspector = Frame(		height = screen_height - top_y,
-					width = screen_width*7/26,
-					bd = 0.5,
-					relief = RAISED			)
-	inspector.configure(		background = 'green'		)
+		elif mode in ['inbox', 'forecast', 'projects', 'review', 'tags']:
+			gwindow.addWidget(self.projectList, 2, 2, 18, 8)
+			gwindow.addWidget(self.actionList, 2, 10, 18, 17)
+			gwindow.addWidget(self.inspectorRem, 2, 27, 18, 7)
+			if mode == 'inbox':
+				pass
+			elif mode == 'forecast':
+				pass
+			elif mode == 'projects':
+				pass
+			elif mode == 'review':
+				pass
+			elif mode == 'tags':
+				pass
 
-	def __init__(self, master = None):
-		super().__init__(master)
-		self.create_widgets()
+		self.win.setLayout(gwindow)
+		self.win.show()
 
-	def create_widgets(self):	
-		self.toolbar.grid(	row = 0,
-					column = 0,
-					columnspan = 4)
-		self.selector.grid(	sticky = 'W')
-		self.project_list.grid(	row = 1,
-					column = 1)
-		self.action_list.grid(	row = 1,
-					column = 2)
-		self.inspector.grid(	row = 1,
-					column = 3)
+	'''def createWidgets(self):
+		self.BoxSelector = QVBoxLayout()
+		self.BoxSelector.addWidget(self.bInbox)
+		self.BoxSelector.addWidget(self.bProjects)
+		self.BoxSelector.addWidget(self.bTags)
+		self.BoxSelector.addWidget(self.bFlagged)
+		self.BoxSelector.addWidget(self.bReview)
+		self.selector.setLayout(self.BoxSelector)
+
+		self.vbox = QVBoxLayout()
+		self.hbox = QHBoxLayout()
+
+		self.vbox.addWidget(self.toolbar)
+		self.vbox.addWidget(self.main)
+		self.hbox.addWidget(self.selector)
+		self.hbox.addWidget(self.project_list)
+		self.hbox.addWidget(self.action_list)
+		self.hbox.addWidget(self.inspector)
+
+		self.toolbar.resize(self.getSize(self.toolbar)[0], 20)
+		self.main.resize(self.getSize(self.main)[0], self.window_height - self.getSize(self.toolbar)[1])
+
+		self.win.setLayout(self.vbox)
+		self.main.setLayout(self.hbox)
+		
+		self.b1 = QPushButton(self.inspector)
+		self.b1.setText('Sooßen')
+		self.b1.move(150, 150)
+
+	def b1_clicked():
+			r1 = random.randint(0, 100)
+			r2 = random.randint(0, 100)
+			self.b1.move(r1, r2)
+	
+		self.b1.clicked.connect(lambda: b1_clicked())
+	'''
 
 class Project():
 	def __init__(self):
@@ -100,21 +189,20 @@ class Action(Project):
 		# actions without projects have inbox as their project
 		self.project = project
 
-def main():
-	actions = load_from_file('actions.txt')				# load contents into variables
+def main():	
+	actions = load_from_file('actions.txt')					# load contents into variables
 	inbox = load_from_file('inbox.txt')
 	projects = load_from_file('projects.txt')
 	tags = load_from_file('tags.txt')
 
-	# Do stuff
+	GUI = Window('projects')
 
-	save_to_file(actions, 'actions.txt')				# write to files
+	#-do stuff
+
+	save_to_file(actions, 'actions.txt')					# write to files
 	save_to_file(inbox, 'inbox.txt')
 	save_to_file(projects, 'projects.txt')
 	save_to_file(tags, 'tags.txt')
 
-	# Create backups periodically 
-
-	Application(master = root).mainloop()
-	
+	#-create backups periodically 
 main()
