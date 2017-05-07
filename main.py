@@ -198,9 +198,9 @@ GUI = Window('projects')
 
 #-do stuff
 
-	save_to_file(actions, 'actions.txt')					# write to files
-	save_to_file(inbox, 'inbox.txt')
-	save_to_file(projects, 'projects.txt')
-	save_to_file(tags, 'tags.txt')
+save_to_file(actions, 'actions.txt')					# write to files
+save_to_file(inbox, 'inbox.txt')
+save_to_file(projects, 'projects.txt')
+save_to_file(tags, 'tags.txt')
 
-	#-create backups periodically 
+#-create backups periodically 
