@@ -189,15 +189,14 @@ class Action(Project):
 		# actions without projects have inbox as their project
 		self.project = project
 
-def main():	
-	actions = load_from_file('actions.txt')					# load contents into variables
-	inbox = load_from_file('inbox.txt')
-	projects = load_from_file('projects.txt')
-	tags = load_from_file('tags.txt')
+actions = load_from_file('actions.txt')					# load contents into variables
+inbox = load_from_file('inbox.txt')
+projects = load_from_file('projects.txt')
+tags = load_from_file('tags.txt')
 
-	GUI = Window('projects')
+GUI = Window('projects')
 
-	#-do stuff
+#-do stuff
 
 	save_to_file(actions, 'actions.txt')					# write to files
 	save_to_file(inbox, 'inbox.txt')
@@ -205,4 +204,3 @@ def main():
 	save_to_file(tags, 'tags.txt')
 
 	#-create backups periodically 
-main()
